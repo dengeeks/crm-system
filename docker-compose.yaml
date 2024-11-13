@@ -6,12 +6,12 @@ services:
     container_name: flask-app
     expose:
       - "5000"
-    volumes:
-      - .:/app
     environment:
       - FLASK_APP=Server.py
     depends_on:
       - db
+    networks:
+      - flask_network
 
   nginx:
     image: nginx:latest
@@ -24,6 +24,8 @@ services:
       - /etc/letsencrypt:/etc/letsencrypt
     depends_on:
       - flask-app
+    networks:
+      - flask_network
 
   db:
     image: postgres:13
@@ -35,6 +37,13 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data/
+    networks:
+      - flask_network
+
+networks:
+  flask_network:
+    driver: bridge
+
 
 volumes:
   postgres_data:
