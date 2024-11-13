@@ -1038,8 +1038,6 @@ def start_WhatsAppEmailing_background_last_message():
     thread.start()
 
 if __name__ == "__main__":
-    with application.app_context():
-        db.create_all()
     start_CheckSubscription_Background()
     start_WhatsAppEmailing_background()
     start_WhatsAppEmailing_background_last_message()
