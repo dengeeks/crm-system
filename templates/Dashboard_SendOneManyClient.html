@@ -1,0 +1,230 @@
+<link rel="stylesheet" href="../static/css/Dashboard_SendOneManyClient.css" type="text/css">
+{% extends "base_dashboard.html" %}
+
+{% block title %}CRM System{% endblock %}
+{% block new_branches %}
+    <a href="#" class="info-excel" onclick="openExcelModal()">INFO</a>
+    <a href="#" onclick="openExcelImportModal()">Импорт</a>
+    <a href="/export_clients_to_excel">Экспорт</a>
+{% endblock %}
+{% block content %}
+    <div class="container">
+        <h2>Список филиалов:</h2>
+
+        <!-- Выпадающий список для выбора CRM -->
+        <form id="crmForm">
+            <div class="form-group">
+                <label for="crm_select">Филиал:</label>
+                <select name="crm_id" id="crm_select" class="form-control">
+                    <option value="" disabled selected>Выберите филиал</option>
+                    {% for crm in crm_systems %}
+                        <option value="{{ crm.id }}">{{ crm.title_branches }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </form>
+
+        <!-- Таблица клиентов -->
+        <h2>Список клиентов</h2>
+        <!-- Контейнер для таблицы клиентов -->
+        <div id="clientsTableContainer">
+            <table class="table" id="clientsTable">
+                <thead>
+                    <tr>
+                        <th>
+                            <div class="select-all-container">
+                                <button id="selectAll" class="btn btn-primary">Выбрать всех</button>
+                            </div>
+                        </th>
+                        <th>Номер телефона</th>
+                        <th>ФИО</th>
+                        <th>Кол-во заказов</th>
+                        <th>Telegram Status</th>
+                        <th>WhatsApp Status</th>
+                        <th>Статус рассылки</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Данные клиентов будут загружаться сюда -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Кнопка для открытия модального окна -->
+        <button class="btn btn-primary" id="openModalBtn" disabled>Написать</button>
+
+        <!-- Модальное окно -->
+        <div id="excelModal" class="modal-excel">
+            <div class="modal-content-excel">
+                <span class="close-btn-excel" onclick="closeExcelModal()">&times;</span>
+                <h4>Пример импорта Excel</h4>
+                <p>Информация о клиентах должна отображаться, начиная со второй строки</p>
+                <table class="styled-table">
+                    <thead>
+                        <tr>
+                            <th>ФИО клиента</th>
+                            <th>Телефон клиента</th>
+                            <th>Статус WhatsApp</th>
+                            <th>Кол-во заказов</th>
+                            <th>Статус рассылки</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Иван Иванов Иванович</td>
+                            <td>+7 900 123-45-67</td>
+                            <td>True</td>
+                            <td>5</td>
+                            <td>True</td>
+                        </tr>
+                        <tr>
+                            <td>Петр Петров Петрович</td>
+                            <td>+7 900 987-65-43</td>
+                            <td>False</td>
+                            <td>2</td>
+                            <td>False</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Модальное окно для импорта Excel -->
+        <div id="excelImportModal" class="modal-excel-import">
+            <div class="modal-content-excel">
+                <span class="close-btn-excel" onclick="closeExcelImportModal()">&times;</span>
+                <h4>Импорт данных из Excel</h4>
+
+                <form id="importForm" method="POST" enctype="multipart/form-data" action="/import_excel">
+                    <div class="form-group">
+                        <label for="branch_select">Выберите филиал:</label>
+                        <select name="crm_id" id="branch_select" class="form-control">
+                            <option value="" disabled selected>Выберите филиал</option>
+                            {% for crm in crm_systems %}
+                                <option value="{{ crm.id }}">{{ crm.title_branches }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="excel_file">Выберите файл Excel:</label>
+                        <input type="file" name="excel_file" id="excel_file" class="form-control" accept=".xls,.xlsx" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Загрузить файл</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Модальное окно -->
+        <div class="modal fade" id="messageModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content-message">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Отправить сообщение</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <textarea id="messageText" class="form-control" rows="5" placeholder="Введите сообщение"></textarea>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" id="sendMessageBtn">Отправить</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div> <!-- Закрывающий тег для контейнера -->
+
+    <!-- Подключение Bootstrap и jQuery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Скрипт для работы с таблицей и модальным окном -->
+    <script>
+        let selectedClients = [];
+
+        // AJAX-запрос для подгрузки клиентов
+        document.getElementById('crm_select').addEventListener('change', function() {
+            const crmId = this.value;
+
+            fetch(`/get_clients/${crmId}`)
+                .then(response => response.json())
+                .then(data => {
+                    const clientsTable = document.getElementById('clientsTable').getElementsByTagName('tbody')[0];
+                    clientsTable.innerHTML = ''; // Очищаем таблицу перед загрузкой новых данных
+
+                    data.clients.forEach(client => {
+                        const row = clientsTable.insertRow();
+                        row.innerHTML = `
+                            <td><input type="checkbox" class="clientCheckbox" value="${client.phone_number}"></td>
+                            <td>${client.phone_number}</td>
+                            <td>${client.fullname_clients}</td>
+                            <td>${client.order_count}</td>
+                            <td>${client.telegram_status ? 'Активен' : 'Не активен'}</td>
+                            <td>${client.whatsapp_status ? 'Активен' : 'Не активен'}</td>
+                            <td>${client.status_bot ? 'Вкл' : 'Выкл'}</td>
+                        `;
+                    });
+
+                    document.getElementById('openModalBtn').disabled = false;
+                });
+        });
+
+        document.getElementById('selectAll').addEventListener('click', function() {
+            const checkboxes = document.querySelectorAll('.clientCheckbox');
+            const allChecked = Array.from(checkboxes).every(cb => cb.checked);
+
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = !allChecked;
+            });
+        });
+
+        // Открытие модального окна
+        document.getElementById('openModalBtn').addEventListener('click', function() {
+            selectedClients = Array.from(document.querySelectorAll('.clientCheckbox:checked')).map(cb => cb.value);
+            $('#messageModal').modal('show');
+        });
+
+        // Отправка сообщения
+        document.getElementById('sendMessageBtn').addEventListener('click', function() {
+            const message = document.getElementById('messageText').value;
+            const crmId = document.getElementById('crm_select').value; // Получаем CRM ID
+
+            fetch('/send_manyoneclient', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    selected_clients: selectedClients,
+                    message: message,
+                    crm_id: crmId // Добавляем crm_id в запрос
+                }),
+            }).then(response => response.json()).then(data => {
+                console.log(data);
+                $('#messageModal').modal('hide');
+            });
+        });
+
+        // Открытие модального окна
+        function openExcelModal() {
+            document.getElementById("excelModal").style.display = "flex";
+        }
+
+        // Закрытие модального окна
+        function closeExcelModal() {
+            document.getElementById("excelModal").style.display = "none";
+        }
+
+        // Открытие модального окна для импорта
+        function openExcelImportModal() {
+            document.getElementById("excelImportModal").style.display = "flex";
+        }
+
+        // Закрытие модального окна для импорта
+        function closeExcelImportModal() {
+            document.getElementById("excelImportModal").style.display = "none";
+        }
+    </script>
+{% endblock %}

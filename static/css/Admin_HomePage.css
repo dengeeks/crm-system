@@ -1,0 +1,28 @@
+/* static/css/Admin_HomePage.css */
+
+.button-items {
+    display: flex;
+    justify-content: center; /* Центрирование кнопок */
+    margin-top: 20px; /* Отступ сверху от контента */
+}
+
+.button-items .button-home,
+.button-items .button-logout {
+    margin: 0 10px; /* Отступ между кнопками */
+}
+
+.button-items a {
+    display: inline-block;
+    padding: 10px 20px;
+    text-decoration: none;
+    color: #ffffff; /* Белый цвет текста */
+    background-color: #343a40; /* Основной цвет фона кнопки */
+    border-radius: 5px;
+    font-weight: bold;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.button-items a:hover {
+    color: #ffffff; /* Цвет текста при наведении */
+    background-color: #212529; /* Более светлый оттенок серого при наведении */
+}

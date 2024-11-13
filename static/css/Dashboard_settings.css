@@ -1,0 +1,75 @@
+/* Общие стили для основной секции */
+.main_board {
+    padding: 20px;
+    margin: 0 auto;
+    max-width: 800px; /* Ширина для лучшего отображения */
+    line-height: 1.7;
+    font-size: 18px;
+    font-family: Arial, sans-serif;
+}
+
+/* Стили для контейнера с формами */
+.password_repair,
+.email_repair {
+    background-color: #f8f8f8;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.2);
+    margin-bottom: 20px;
+}
+
+/* Стили для заголовков секций */
+.password_repair h2,
+.email_repair h2 {
+    margin-bottom: 15px;
+    font-size: 22px;
+    color: #212529;
+}
+
+/* Стили для меток и полей ввода */
+.password_repair label,
+.email_repair label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #212529;
+}
+
+.password_repair input,
+.email_repair input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+/* Стили для кнопок */
+.password_repair button,
+.email_repair button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-right: 10px; /* Отступ между кнопками */
+}
+
+.password_repair button:hover,
+.email_repair button:hover {
+    background-color: #0056b3;
+}
+
+/* Устранение границы между секциями */
+.password_repair button {
+    margin-top: 10px;
+}
+
+.email_repair button {
+    margin-top: 10px;
+}

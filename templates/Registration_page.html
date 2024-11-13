@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../static/css/Registration_page.css" type="text/css">
+    <title>Регистрация</title>
+    <style>
+        .hidden {
+            display: none;
+        }
+        .form-container {
+            max-width: 400px;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+<div class="form-container">
+    <!-- Форма регистрации -->
+    <div id="registrationFormContainer">
+        <h2>Регистрация</h2>
+        <form id="registrationForm" action="/Registration" method="post" onsubmit="validateForm(event)">
+            <input required type="text" name="full_name" placeholder="Введите ФИО">
+            <input required type="text" name="phone_number" placeholder="Введите номер телефона">
+            <input required type="text" name="company_name" placeholder="Введите Название компании">
+            <input required type="email" name="email" placeholder="Введите Email" id="email">
+            <div class="password-container">
+                <input required type="password" id="password" name="password" placeholder="Введите пароль">
+                <span class="toggle-password" onclick="togglePasswordVisibility('password')">&#128065;</span>
+            </div>
+            <div class="password-container">
+                <input required type="password" id="confirmPassword" name="confirm_password" placeholder="Повторите пароль">
+                <span class="toggle-password" onclick="togglePasswordVisibility('confirmPassword')">&#128065;</span>
+            </div>
+            <button type="submit" id="submitBtn" disabled>Зарегистрироваться</button>
+            <p id="error-message" style="color: red;"></p>
+            <p id="email-error-message" style="color: red;"></p>
+        </form>
+    </div>
+
+    <!-- Форма ввода кода подтверждения -->
+    <div id="confirmationFormContainer" class="hidden">
+        <h2>Введите код подтверждения</h2>
+        <form id="confirmationForm" action="/ConfirmCode" method="post">
+            <input required type="text" name="confirmation_code" placeholder="Введите код подтверждения">
+            <button type="submit">Подтвердить</button>
+        </form>
+    </div>
+</div>
+
+<script>
+document.getElementById('password').addEventListener('input', checkPasswords);
+document.getElementById('confirmPassword').addEventListener('input', checkPasswords);
+document.getElementById('email').addEventListener('input', checkEmail);
+
+function checkPasswords() {
+    var password = document.getElementById("password").value;
+    var confirmPassword = document.getElementById("confirmPassword").value;
+    var errorMessage = document.getElementById("error-message");
+    var submitBtn = document.getElementById("submitBtn");
+
+    if (password !== confirmPassword) {
+        errorMessage.textContent = "Пароли не совпадают.";
+        submitBtn.disabled = true;
+    } else {
+        errorMessage.textContent = "";
+        submitBtn.disabled = false;
+    }
+}
+
+function checkEmail() {
+    var email = document.getElementById("email").value;
+    var emailErrorMessage = document.getElementById("email-error-message");
+    var submitBtn = document.getElementById("submitBtn");
+
+    fetch('/check_email', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ email: email })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.exists) {
+            emailErrorMessage.textContent = "Пользователь с таким Email уже существует.";
+            submitBtn.disabled = true;
+        } else {
+            emailErrorMessage.textContent = "";
+            submitBtn.disabled = !document.getElementById("password").value === document.getElementById("confirmPassword").value;
+        }
+    });
+}
+
+function validateForm(event) {
+    event.preventDefault(); // Останавливаем отправку формы
+
+    var password = document.getElementById("password").value;
+    var confirmPassword = document.getElementById("confirmPassword").value;
+    var errorMessage = document.getElementById("error-message");
+
+    if (password !== confirmPassword) {
+        errorMessage.textContent = "Пароли не совпадают.";
+        return;
+    }
+
+    errorMessage.textContent = "";
+
+    // Отправляем данные на сервер
+    var formData = new FormData(document.getElementById('registrationForm'));
+
+    fetch('/Registration', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.text())
+    .then(data => {
+        // Проверяем, успешна ли регистрация и показываем форму подтверждения
+        if (data.includes('confirmation_code.html')) {
+            document.getElementById('registrationFormContainer').classList.add('hidden');
+            document.getElementById('confirmationFormContainer').classList.remove('hidden');
+        } else {
+            // Обрабатываем возможные ошибки
+            document.getElementById('error-message').textContent = "Ошибка регистрации. Попробуйте снова.";
+        }
+    });
+}
+
+function togglePasswordVisibility(id) {
+    var input = document.getElementById(id);
+    if (input.type === "password") {
+        input.type = "text";
+    } else {
+        input.type = "password";
+    }
+}
+</script>
+</body>
+</html>

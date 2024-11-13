@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../static/css/DashBoard_statistics.css" type="text/css">
+    <title>{% block title %}Панель администратора{% endblock %}</title>
+</head>
+<body>
+{% extends "base_dashboard.html" %}
+{% block content %}
+    <div class="main-content">
+        <div class="container-mk1">
+            <div class="container-date">
+                <ul>
+                    <li><a href="#">Вчера</a></li>
+                    <li><a href="#">Неделя</a></li>
+                    <li><a href="#">Месяц</a></li>
+                    <li><a href="#">Квартал</a></li>
+                    <li><a href="#">Год</a></li>
+                </ul>
+            </div>
+            <div class="container-company">
+                <table>
+                    <thead>
+                        <tr>
+                            <td>Yandex</td>
+                            <td>2GIS</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>2</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="right-side">
+                <select class="dropdown">
+                    <option value="" disabled selected>Все филиалы</option> <!-- Это будет заголовок по умолчанию -->
+                    <option value="option1">Опция 1</option>
+                    <option value="option2">Опция 2</option>
+                    <option value="option3">Опция 3</option>
+                </select>
+            <div class="extra-block">
+                <!-- Ваш дополнительный контент -->
+                <p>Дополнительный блок</p>
+            </div>
+        </div>
+    </div>
+    <div class="work">
+        <p>Данная страница в разработке</p>
+    </div>
+{% endblock %}
+</body>
+</html>

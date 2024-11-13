@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../static/css/Login_page.css">
+    <title>Страница Авторизации</title>
+</head>
+<body>
+    <div class="login-container">
+        <h2>Авторизация</h2>
+        <form action="/Login" method="post">
+            <div class="input-group">
+                <input type="email" id="username" name="email" required placeholder="Введите email">
+            </div>
+            <div class="input-group">
+                <input type="password" id="password" name="password" required placeholder="Введите пароль">
+            </div>
+            <button type="submit">Войти</button>
+        </form>
+        <div class="redirect_registration_page">
+            <a href="/Registration">Нет аккаунта? Зарегистрируйтесь!</a>
+        </div>
+    </div>
+</body>
+</html>

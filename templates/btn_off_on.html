@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Рассылка</title>
+    <link rel="stylesheet" href="../static/css/btn_on_off.css">
+</head>
+<body>
+    <div class="container">
+        <div class="panel">
+            <div class="logo">
+                <h1>Управление рассылкой</h1>
+            </div>
+            <div class="content">
+                <div class="input-group">
+                    <input type="tel" id="phone-number" class="input-field" placeholder="Введите номер телефона">
+                </div>
+                <div class="buttons">
+                    <button id="enable" class="btn btn-enable">Включить рассылку</button>
+                    <button id="disable" class="btn btn-disable">Выключить рассылку</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const phoneNumberInput = document.getElementById('phone-number');
+            const enableButton = document.getElementById('enable');
+            const disableButton = document.getElementById('disable');
+
+            const sendStatus = (status) => {
+                const phoneNumber = phoneNumberInput.value;
+                if (!phoneNumber) {
+                    alert('Пожалуйста, введите номер телефона.');
+                    return;
+                }
+
+                fetch('/client_bot_management', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        phoneNumber: phoneNumber,
+                        status: status.toString() // Преобразование булевого значения в строку
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Response Data:', data);
+
+                    // Очистка поля ввода
+                    phoneNumberInput.value = '';
+
+                    // Уведомление пользователю
+                    if (data.success) {
+                        if (status === true) {
+                            alert('Рассылка включена для номера ' + phoneNumber);
+                        } else {
+                            alert('Рассылка выключена для номера ' + phoneNumber);
+                        }
+                    } else {
+                        alert('Ошибка: ' + data.message);
+                    }
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                    alert('Произошла ошибка при отправке данных.');
+                });
+            };
+
+            enableButton.addEventListener('click', () => {
+                sendStatus(true);
+            });
+
+            disableButton.addEventListener('click', () => {
+                sendStatus(false);
+            });
+        });
+    </script>
+</body>
+</html>

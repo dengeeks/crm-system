@@ -1,0 +1,354 @@
+/* Общие стили для основной секции */
+.main_content_branches {
+    padding: 20px;
+    margin: 0 auto;
+    max-width: 1200px;
+    line-height: 1.7;
+    font-size: 18px;
+    font-family: Arial, sans-serif;
+}
+
+/* Стили для списка CRM-систем */
+.main_content_branches ul {
+    list-style-type: none;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px; /* Пробел между элементами */
+}
+
+/* Стили для каждого элемента списка */
+.main_content_branches li {
+    background-color: #f8f8f8;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 15px;
+    flex: 1 1 calc(33.333% - 20px); /* 3 элемента в ряд с учетом отступов */
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.2);
+    min-width: 250px; /* Минимальная ширина для элементов */
+    display: flex;
+    flex-direction: column; /* Позволяет разместить содержимое вертикально */
+}
+
+/* Стили для информации о CRM */
+.crm-info {
+    flex-grow: 1; /* Позволяет этому блоку занимать оставшееся пространство */
+    font-size: 18px;
+    font-weight: initial;
+    font-style: revert;
+}
+
+.crm-info a {
+    color: #007bff;
+    text-decoration: none;
+    transition: all 0.5s;
+}
+
+/* Контейнер для кнопок */
+.button-container {
+    display: flex;
+    align-items: self-end;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+
+/* Кнопки */
+.button-container button,
+.dropdown-button-branches {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    padding: 7px;
+    transition: background-color 0.3s;
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+    text-align: center;           /* Выравниваем текст по центру */
+    min-width: 150px;             /* Устанавливаем минимальную ширину кнопки */
+}
+
+/* Эффекты при наведении на кнопки */
+.button-container button:hover,
+.dropdown-button-branches:hover {
+    background-color: #0056b3;
+}
+
+/* Отключенная кнопка */
+.button-container button:disabled,
+.dropdown-button-branches:disabled {
+    background-color: #c0c0c0;
+    cursor: not-allowed;
+}
+
+/* Стили для модальных окон */
+.modal,
+.modal-disconnect {
+    display: none; /* Скрыто по умолчанию */
+    position: fixed; /* Остается на месте при прокрутке */
+    z-index: 1000; /* На переднем плане */
+    left: 0;
+    top: 0;
+    width: 100%; /* Полная ширина */
+    height: 100%; /* Полная высота */
+    overflow: auto; /* Прокрутка если необходимо */
+    background-color: rgba(0, 0, 0, 0.6); /* Полупрозрачный фон */
+    justify-content: center; /* Центрируем по горизонтали */
+    align-items: center; /* Центрируем по вертикали */
+}
+
+/* Стили для содержимого модальных окон */
+.modal-content,
+.modal-content-disconnect {
+    margin: 15% auto;
+    background-color: #fff; /* Цвет фона */
+    padding: 20px; /* Отступы внутри */
+    border-radius: 8px; /* Скругление углов */
+    max-width: 50%;
+    width: auto;
+    max-height: 80vh; /* Максимальная высота окна 80% от высоты экрана */
+    overflow: auto; /* Прокрутка, если содержимое превышает высоту */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Тень */
+    position: relative; /* Для позиционирования кнопки закрытия */
+    text-align: center; /* Выравнивание текста по центру */
+}
+
+.modal-disconnect {
+    font-family: Arial, sans-serif;
+    line-height: 1.5;
+    background-color: rgba(0, 0, 0, 0.5); /* Полупрозрачный фон для отключения */
+}
+
+/* Стили для кнопки "Отключить" */
+.modal-content-disconnect button {
+    background-color: #007bff; /* Красный цвет для кнопки */
+    color: #fff; /* Цвет текста */
+    border: none; /* Без рамки */
+    border-radius: 5px; /* Скругление углов */
+    padding: 10px 20px; /* Отступы внутри кнопки */
+    cursor: pointer; /* Курсор при наведении */
+    font-size: 16px; /* Размер шрифта */
+    transition: background-color 0.3s; /* Плавный переход цвета фона */
+}
+
+/* Эффект при наведении на кнопку */
+.modal-content-disconnect button:hover {
+    background-color: #d32f2f; /* Темнее при наведении */
+}
+
+/* Стили для модального окна помощи */
+.HelpModal {
+    font-size: 15px;
+    display: none; /* Скрыто по умолчанию */
+    position: fixed; /* Остается на месте при прокрутке */
+    z-index: 1000; /* На переднем плане */
+    left: 0;
+    top: 0;
+    width: 100%; /* Полная ширина */
+    height: 100%; /* Полная высота */
+    background-color: rgba(0, 0, 0, 0.6); /* Полупрозрачный фон */
+    justify-content: center; /* Центрируем по горизонтали */
+    align-items: center; /* Центрируем по вертикали */
+}
+
+/* Стили для содержимого модального окна помощи */
+.help-modal-content {
+    position: relative;
+    background-color: #fff;
+    padding: 20px; /* Уменьшите отступы, если нужно */
+    border-radius: 8px;
+    max-width: 90%;
+    width: auto;
+    max-height: 80vh;
+    overflow: auto;
+    margin: 3% auto; /* Центрируем без верхних и нижних отступов */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Установите более компактные стили для заголовков */
+.help-modal-content h4,
+.help-modal-content h5 {
+    margin: 5px 0; /* Уменьшенные отступы */
+    font-size: 17px;
+}
+
+/* Для примера тела запроса */
+/* Для примера тела запроса */
+pre {
+    margin: 0; /* Убираем отступы */
+    padding: 0;
+    background-color: #f4f4f4;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+.close-btn-help {
+    position: absolute; /* Позиционирование относительно родителя */
+    top: 10px; /* Отступ сверху */
+    right: 15px; /* Отступ справа от края блока */
+    font-size: 24px; /* Размер шрифта */
+    cursor: pointer; /* Курсор в виде руки при наведении */
+}
+
+
+.modal .modal-content {
+    width: 25%;
+}
+
+.modal .modal-content h3, h4 {
+    margin-top: 3%;
+    margin-bottom: 5%;
+}
+
+/* Стили для кнопки закрытия */
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 20px;
+    cursor: pointer;
+    color: #333;
+}
+
+/* Стили для текста внутри модального окна */
+.modal-content p,
+.modal-content h2 {
+    text-align: center;
+}
+
+/* Стили для кнопок внутри модального окна */
+.modal-content button {
+    display: block;
+    margin: 0 auto;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.modal-content button:hover {
+    background-color: #0056b3;
+}
+
+/* Стили для контейнера кнопки с выпадающим меню */
+.dropdown-branches {
+    position: relative; /* Относительное позиционирование для точной привязки меню */
+}
+
+/* Стили для выпадающего меню настроек */
+.dropdown-content-branches {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 300px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+    top: 100%; /* Располагаем под кнопкой */
+    left: 50%; /* Выравниваем меню по центру кнопки */
+    transform: translateX(-50%); /* Сдвиг влево на 50%, чтобы центр меню совпал с центром кнопки */
+}
+
+/* Стили для элементов выпадающего меню */
+.dropdown-content-branches button {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+.dropdown-content-branches button:hover {
+    background-color: #f1f1f1;
+}
+
+/* Показываем меню при наведении на кнопку */
+.dropdown-branches:hover .dropdown-content-branches {
+    display: block;
+}
+
+/* Изменение фона кнопки при наведении */
+.dropdown-branches:hover .dropdown-button-branches {
+    background-color: #2BA8E8;
+}
+
+/* Стили для модального окна с вводом номера телефона */
+#phoneModal .modal-content {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    max-width: 400px;
+    width: 100%;
+    margin: 15% auto;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    text-align: center;
+}
+
+#phoneModal input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+#phoneModal button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    margin-top: 10px;
+    cursor: pointer;
+}
+
+#phoneModal button:hover {
+    background-color: #0056b3;
+}
+
+#phoneModal p {
+    font-family: Arial, sans-serif;
+    font-weight: initial;
+    line-height: 1.5;
+}
+
+/* Стили для инструкции */
+.instruction-link {
+    text-align: right;
+    margin-bottom: 10px;
+}
+
+.instruction-link a {
+    color: #007bff;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 16px;
+    transition: all 0.5s;
+}
+
+.instruction-link a:hover {
+    color: #2BA8E8;
+}
+
+/* Стили для примера тела запроса */
+pre {
+    background-color: #f4f4f4;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 15px;
+    overflow: auto;
+    font-size: 14px;
+    white-space: pre-wrap; /* Поддержка переноса текста и пробелов */
+    word-wrap: break-word; /* Перенос длинных слов на новую строку */
+}
+
+code {
+    display: block;
+    color: #333;
+}

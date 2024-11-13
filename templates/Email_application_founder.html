@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Новая заявка на подключение</title>
+</head>
+<body style="font-family: Arial, sans-serif; background-color: #e7e7e7; margin: 0; padding: 0;">
+    <div style="width: 80%; margin: 0 auto; padding: 20px; background-color: #ffffff; box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22); border-radius: 8px; margin-top: 20px;">
+        <h1 style="color: #212121; text-align: center; border-bottom: 1px solid #f65849; padding-bottom: 10px;">Новая заявка на подключение</h1>
+        <div style="margin-bottom: 15px;">
+            <strong style="color: #f65849;">ФИО:</strong>
+            <p style="margin: 0; color: #333;">{{ full_name }}</p>
+        </div>
+        <div style="margin-bottom: 15px;">
+            <strong style="color: #f65849;">Почта:</strong>
+            <p style="margin: 0; color: #333;">{{ email }}</p>
+        </div>
+        <div style="margin-bottom: 15px;">
+            <strong style="color: #f65849;">Телефон:</strong>
+            <p style="margin: 0; color: #333;">{{ phone_number }}</p>
+        </div>
+        <div style="margin-bottom: 15px;">
+            <strong style="color: #f65849;">Компания:</strong>
+            <p style="margin: 0; color: #333;">{{ name_company }}</p>
+        </div>
+        <div style="margin-bottom: 15px;">
+            <strong style="color: #f65849;">Описание:</strong>
+            <p style="margin: 0; color: #333;">{{ description }}</p>
+        </div>
+    </div>
+</body>
+</html>

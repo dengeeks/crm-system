@@ -1,0 +1,127 @@
+body {
+    margin: 0;
+    padding: 0;
+    overflow-y: hidden;
+    background-color: #f5f5f5; /* Цвет фона для всего тела страницы */
+}
+
+/* Стили для формы выбора CRM */
+.crm-selector-container {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 20px; /* Добавляем отступы вокруг формы */
+    background-color: #fff; /* Фон формы */
+    border-radius: 8px; /* Скругляем углы формы */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Добавляем тень к форме */
+    margin-bottom: 20px; /* Отступ снизу */
+}
+
+/* Стили для label и select внутри формы */
+.crm-selector-container label {
+    margin-right: 15px;
+    font-size: 16px; /* Размер шрифта для label */
+    color: #333; /* Цвет текста для label */
+}
+
+.crm-selector-container select {
+    padding: 10px; /* Увеличиваем отступы внутри элемента select */
+    font-size: 16px; /* Увеличиваем размер шрифта */
+    width: 250px; /* Устанавливаем ширину для select */
+    height: 40px; /* Устанавливаем высоту для select */
+    border-radius: 4px; /* Скругляем углы */
+    border: 1px solid #ccc; /* Цвет границы */
+    background-color: #fff; /* Цвет фона для select */
+}
+
+/* Стили для кнопки */
+.crm-selector-container button {
+    background-color: #007bff; /* Цвет фона кнопки */
+    color: #fff; /* Цвет текста кнопки */
+    border: none; /* Убираем бордер по умолчанию */
+    padding: 5px 10px; /* Отступы внутри кнопки */
+    font-size: 16px; /* Размер шрифта */
+    cursor: pointer; /* Курсор в виде руки при наведении */
+    border-radius: 4px; /* Скругление углов кнопки */
+    transition: background-color 0.3s, transform 0.2s; /* Плавные переходы для фона и масштаба */
+}
+
+.crm-selector-container button:hover {
+    background-color: #0056b3; /* Цвет фона при наведении */
+}
+
+.crm-selector-container button:active {
+    transform: scale(0.98); /* Эффект нажатия кнопки */
+}
+
+/* Стили для таблицы */
+.table-container {
+    width: 100%;
+    max-height: 400px; /* Уменьшаем максимальную высоту контейнера таблицы */
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    border-radius: 8px; /* Скругляем углы контейнера таблицы */
+    background-color: #fff; /* Фон таблицы */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Добавляем тень к таблице */
+    margin-top: 20px; /* Отступ сверху */
+}
+
+/* Стили для таблицы и ячеек */
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+thead {
+    background-color: #333; /* Темный фон для заголовков */
+    color: #fff; /* Белый цвет текста */
+}
+
+th {
+    padding: 10px 15px; /* Уменьшаем отступы в заголовках */
+    text-align: left;
+    border-bottom: 1px solid #444; /* Темная граница для заголовков */
+    font-size: 14px; /* Уменьшаем размер шрифта в заголовках */
+}
+
+td {
+    padding: 12px 15px; /* Увеличиваем отступы в ячейках */
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+    background-color: #fff; /* Цвет фона для ячеек */
+    color: #555; /* Цвет текста ячеек */
+}
+
+/* Дополнительные стили для отображения сообщения */
+.message-cell {
+    white-space: pre-wrap; /* Сохраняет пробелы и переносы строк */
+    word-break: break-word; /* Перенос длинных слов */
+    max-width: 400px; /* Увеличиваем максимальную ширину ячейки */
+    overflow-wrap: break-word; /* Перенос слов для предотвращения горизонтальной прокрутки */
+}
+
+/* Стилизация полосы прокрутки для контейнера таблицы */
+.table-container::-webkit-scrollbar {
+    width: 10px; /* Ширина полосы прокрутки */
+}
+
+.table-container::-webkit-scrollbar-track {
+    background: #f1f1f1; /* Цвет фона трека прокрутки */
+    border-radius: 10px; /* Скругление углов трека */
+}
+
+.table-container::-webkit-scrollbar-thumb {
+    background: #007bff; /* Цвет ползунка прокрутки */
+    border-radius: 10px; /* Скругление углов ползунка */
+}
+
+.table-container::-webkit-scrollbar-thumb:hover {
+    background: #0056b3; /* Цвет ползунка при наведении */
+}
+
+/* Общее оформление страницы */
+.container {
+    max-width: 1200px;
+    margin: 0 auto; /* Центрируем контейнер */
+    padding: 20px;
+}

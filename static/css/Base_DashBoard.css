@@ -1,0 +1,344 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+/* Стили для кастомного скроллбара */
+::-webkit-scrollbar {
+    width: 12px; /* Ширина вертикального скроллбара */
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1; /* Цвет фона трека */
+    border-radius: 10px; /* Закругление углов трека */
+}
+
+::-webkit-scrollbar-thumb {
+    background: #007bff; /* Цвет ползунка */
+    border-radius: 10px; /* Закругление углов ползунка */
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #0056b3; /* Цвет ползунка при наведении */
+}
+
+/* Для Firefox */
+* {
+    scrollbar-width: thin; /* Делаем скроллбар тонким */
+    scrollbar-color: #007bff #f1f1f1; /* Цвет ползунка и трека */
+}
+
+
+header {
+    box-sizing: border-box; /* Включаем отступы в общую ширину */
+    display: flex;
+    width: 100%;
+    height: 5em;
+    box-shadow: 0px 0px 10px 1px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+    background: white;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px; /* Добавляем отступы по бокам */
+}
+
+.menu-toggle {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 30px;
+    height: 20px;
+    cursor: pointer;
+}
+
+.link-in-header {
+    display: flex; /* Устанавливаем flexbox для размещения элементов в ряд */
+    align-items: center; /* Центрирование по вертикали */
+    gap: 20px; /* Пробелы между элементами */
+}
+
+.menu-add-CRM {
+    margin-left: 20px; /* Добавляем отступ между меню и кнопкой CRM */
+}
+
+header .link-in-header a {
+    font-family: Arial, sans-serif;
+    text-decoration: none;
+    background-color: #007bff;
+    padding: 10px;
+    border-radius: 7px;
+    color: white;
+    transition: 0.5s all;
+}
+
+header .link-in-header a:hover {
+    background-color: #1E90FF;
+}
+
+.link {
+    color: #fff;
+    padding: 0.4rem;
+    position: relative;
+    margin-right: 20px;
+}
+
+.link:before {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 2px;
+    background: #007bff;
+    transform: scaleX(0);
+    transition: all 1s ease;
+}
+
+.link:before {
+    bottom: 0;
+    left: 0;
+}
+
+.link:hover::before {
+    transform: scaleX(1);
+}
+
+.user-info {
+    position: relative;
+    margin-left: auto; /* Перемещаем user-info в правую часть */
+}
+
+.user-menu {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.user-menu span {
+    font-size: 1.2em;
+    color: #333;
+    white-space: nowrap;
+}
+
+.user-dropdown-content {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: white;
+    padding: 5px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px 1px rgba(0, 0, 0, 0.25);
+    z-index: 1;
+}
+
+.user-dropdown-content a {
+    text-align: center;
+    color: #333;
+    padding: 10px 70px;
+    text-decoration: none;
+    border-radius: 7px;
+    display: block;
+}
+
+.user-dropdown-content a:hover {
+    color: white;
+    background-color: #007bff;
+}
+
+.user-menu:hover .user-dropdown-content {
+    display: block;
+}
+
+.modal-branches {
+    display: none; /* Скрыто по умолчанию */
+    position: fixed; /* Остается на месте при прокрутке */
+    z-index: 1; /* На переднем плане */
+    left: 0;
+    top: 0;
+    width: 100%; /* Полная ширина */
+    height: 100%; /* Полная высота */
+    overflow: auto; /* Прокрутка если необходимо */
+    background-color: rgba(0, 0, 0, 0.4); /* Полупрозрачный фон */
+    justify-content: center; /* Центрируем по горизонтали */
+    align-items: center; /* Центрируем по вертикали */
+}
+
+
+.modal-content-branches {
+    background-color: #fefefe;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; /* Ширина окна */
+    max-width: 600px; /* Максимальная ширина окна */
+    border-radius: 8px; /* Скругленные углы */
+    position: relative;
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* Стили для формы */
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+select {
+    padding: 10px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+input {
+    padding: 10px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    width: 100%;
+    box-sizing: border-box; /* Включаем padding и border в ширину элемента */
+    font-size: 16px; /* Устанавливаем размер шрифта */
+}
+
+input:focus {
+    border-color: #007bff;
+    outline: none; /* Убираем стандартный фокусный контур */
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Добавляем тень при фокусе */
+}
+
+input::placeholder {
+    color: #999; /* Цвет текста placeholder */
+}
+
+.submit-button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px; /* Устанавливаем размер шрифта */
+    text-align: center; /* Выравнивание текста по центру */
+    display: inline-block; /* Чтобы кнопка не растягивалась на всю ширину */
+}
+
+.submit-button:hover {
+    background-color: #0056b3;
+}
+/**/
+
+.menu-toggle {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 30px;
+    height: 20px;
+    cursor: pointer;
+}
+
+.menu-toggle span {
+    display: block;
+    width: 100%;
+    height: 3px;
+    background: #333;
+    margin-left: 50%;
+}
+
+.main_part {
+    width: 100%;
+    height: 90vh;
+    display: flex;
+}
+
+.side_menu {
+    width: 20%;
+    height: 100%;
+    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+    background: white;
+    position: absolute;
+    left: -100%;
+    transition: left 0.3s ease;
+}
+
+.side_menu.open {
+    left: 0;
+}
+
+.side_menu nav ul {
+    list-style-type: none;
+    padding: 20px;
+}
+
+.side_menu nav ul li {
+    margin: 0 auto;
+}
+
+.side_menu nav ul li a {
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    position: relative;
+    padding: 20px;
+}
+
+.side_menu nav ul li a .icon {
+    margin-right: 10px;
+    color: #007bff; /* Синий цвет для значков */
+}
+
+.side_menu nav ul li a:hover {
+    text-decoration: none; /* Убираем подчеркивание при наведении */
+}
+
+
+.side_menu .dropdown-content {
+    display: none;
+    margin: 0;
+    padding: 0;
+    padding-left: 30px;
+}
+
+.side_menu .dropdown.show .dropdown-content {
+    display: block;
+}
+
+.side_menu .dropdown-icon {
+    margin-left: auto;
+    color: #007bff; /* Синий цвет для стрелочек */
+}
+
+.side_menu .dropdown .dropdown-content .dropdown-icon {
+    display: none; /* Не показываем стрелочку для подменю */
+}
+
+.main_board {
+    flex-grow: 1;
+    padding: 20px;
+    transition: width 0.3s ease;
+}
+
+@media (max-width: 768px) {
+    .side_menu {
+        width: 70%;
+    }
+
+    .side_menu.open {
+        left: 0;
+    }
+}

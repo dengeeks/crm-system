@@ -1,0 +1,111 @@
+/* Основные стили для страницы */
+body {
+    margin: 0;
+    padding: 0;
+    background: #e7e7e7;
+    font-family: Arial, sans-serif;
+}
+
+/* Контейнер для панели */
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/* Панель */
+.panel {
+    width: 70%;
+    max-width: 800px;
+    border: 1px solid #ccc;
+    background: #212121; /* Темный фон панели */
+    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+    padding: 20px;
+    color: #fff;
+}
+
+/* Логотип */
+.logo {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.logo h1 {
+    font-size: 1.75rem;
+    margin: 0;
+}
+
+/* Контент панели */
+.content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+input {
+    text-align: center;
+}
+
+input::placeholder {
+    text-align: center;
+}
+
+/* Кнопки управления */
+.buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    margin-top: 20px;
+}
+
+.btn {
+    width: 60%; /* Сделано для соответствия ширине поля ввода */
+    height: 45px; /* Установлена высота в соответствии с полем ввода */
+    border-radius: 4px;
+    color: #fff;
+    border: none;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.btn-enable {
+    background: linear-gradient(to right, #5fafff, #4a80d1);
+}
+
+.btn-disable {
+    background: linear-gradient(to right, #f65849, #ff7e5f);
+}
+
+.btn:hover {
+    transform: scale(1.05);
+}
+
+/* Поле ввода */
+.input-group {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.input-field {
+    width: 80%; /* Уменьшена ширина поля ввода */
+    max-width: 500px; /* Ограничение максимальной ширины */
+    height: 45px; /* Установлена высота в соответствии с кнопками */
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    padding: 0 15px;
+    font-size: 1rem;
+    box-sizing: border-box;
+    outline: none;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.input-field:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(38, 143, 255, 0.3);
+}

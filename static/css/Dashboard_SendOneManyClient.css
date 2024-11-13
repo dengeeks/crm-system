@@ -1,0 +1,406 @@
+/* Основные стили для контейнера */
+.container {
+    margin: 0 auto;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+}
+
+/* Заголовки */
+h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+/* Стили для формы */
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-control {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 10px;
+    font-size: 16px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.form-control:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 0.2rem rgba(38, 143, 255, 0.25);
+    outline: none;
+}
+
+/* Стили для таблицы */
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.table th,
+.table td {
+    padding: 10px;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+}
+
+.table th {
+    background-color: #f8f9fa;
+    font-weight: bold;
+}
+
+/* Контейнер для таблицы клиентов с прокруткой */
+#clientsTableContainer {
+    max-height: 400px; /* Установите подходящую высоту для блока */
+    overflow-y: auto;
+    margin-bottom: 20px;
+}
+
+/* Кнопки */
+.btn {
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    color: #fff;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+}
+
+.modal {
+    display: none; /* Скрыто по умолчанию */
+    position: fixed; /* Остается на месте при прокрутке */
+    z-index: 1; /* На переднем плане */
+    left: 0;
+    top: 0;
+    width: 100%; /* Полная ширина */
+    height: 100%; /* Полная высота */
+    overflow: auto; /* Прокрутка если необходимо */
+    background-color: rgba(0,0,0,0.4); /* Полупрозрачный фон */
+}
+
+/* Модальное окно */
+.modal-dialog {
+    display: flex;
+    justify-content: center; /* Центрируем по горизонтали */
+    align-items: center; /* Центрируем по вертикали */
+    height: 100%; /* Высота 100% для вертикального центрирования */
+}
+
+/* Содержимое модального окна */
+.modal-content-message {
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Добавляем тень для глубины */
+    max-width: 600px; /* Максимальная ширина окна */
+    width: 90%; /* Ширина окна по умолчанию */
+}
+
+/* Заголовок модального окна */
+.modal-header {
+    background-color: #007bff; /* Синий фон заголовка */
+    color: #fff; /* Белый цвет текста */
+    border-bottom: none; /* Убираем нижнюю границу */
+    border-radius: 10px;
+    padding: 20px; /* Увеличенные отступы */
+    display: flex; /* Выровняем контент по горизонтали */
+    justify-content: space-between; /* Кнопка закрытия справа */
+    align-items: center; /* Выравнивание по центру по вертикали */
+}
+
+/* Заголовок модального окна */
+.modal-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin: 0;
+}
+
+/* Кнопка закрытия модального окна */
+.close {
+    color: #fff; /* Белый цвет креста */
+    font-size: 24px; /* Увеличим размер крестика */
+    border: none; /* Убираем границы */
+    background: none; /* Убираем фон */
+    padding: 0;
+    margin: 0;
+    cursor: pointer;
+    outline: none;
+}
+
+.close:hover {
+    color: #f8f9fa; /* Немного светлее при наведении */
+}
+
+/* Тело модального окна */
+.modal-body {
+    padding: 15px; /* Уменьшенные отступы */
+    background-color: #f8f9fa; /* Светлый фон для контраста с заголовком */
+    font-size: 16px; /* Удобный размер шрифта */
+    color: #333; /* Темный цвет текста */
+}
+
+/* Текстовое поле для сообщения */
+#messageText {
+    width: 100%; /* Полная ширина */
+    height: auto;
+    padding: 15px; /* Просторные отступы внутри */
+    font-size: 16px; /* Удобный размер текста */
+    border-radius: 4px; /* Скругленные углы */
+    border: 1px solid #ddd; /* Легкая граница */
+    box-sizing: border-box; /* Учитываем padding */
+    resize: none; /* Убираем возможность изменения размера текстового поля */
+}
+
+/* Стили при фокусе текстового поля */
+#messageText:focus {
+    border-color: #007bff; /* Цвет границы при фокусе */
+    box-shadow: 0 0 0 0.2rem rgba(38, 143, 255, 0.25); /* Подсветка при фокусе */
+    outline: none; /* Убираем стандартное выделение */
+}
+
+/* Подвал модального окна */
+.modal-footer {
+    padding: 15px 20px; /* Просторный отступ */
+    border-top: none; /* Убираем верхнюю границу */
+    background-color: #f8f9fa; /* Соответствует фону тела модального окна */
+    display: flex; /* Выравнивание кнопок */
+    justify-content: flex-end; /* Кнопки справа */
+}
+
+/* Кнопка отправки сообщения */
+#sendMessageBtn {
+    background-color: #007bff; /* Синий фон кнопки */
+    color: #fff; /* Белый цвет текста */
+    border: none; /* Убираем границы */
+    border-radius: 5px; /* Скругленные углы */
+    padding: 10px 20px; /* Отступы внутри */
+    font-size: 16px; /* Размер текста */
+    cursor: pointer; /* Указатель курсора */
+    transition: background-color 0.3s ease, transform 0.2s ease; /* Плавные переходы */
+}
+
+/* Ховер для кнопки отправки */
+#sendMessageBtn:hover {
+    background-color: #0056b3; /* Темно-синий при наведении */
+    transform: translateY(-2px); /* Поднимаем кнопку при наведении */
+}
+
+#sendMessageBtn:active {
+    background-color: #004080; /* Цвет при нажатии */
+    transform: translateY(0); /* Возвращаем кнопку на место */
+}
+
+/* Стили для чекбоксов */
+.clientCheckbox {
+    margin-right: 10px;
+}
+
+/* Убираем обводку и тень при фокусе у чекбоксов */
+.clientCheckbox:focus {
+    outline: none;
+    box-shadow: none;
+}
+
+#selectAll {
+    margin-right: 10px;
+}
+
+#selectAll:focus {
+    outline: none;
+    box-shadow: none;
+}
+
+/* Основные стили для кнопок */
+.btn {
+    border: none;
+    border-radius: 5px; /* Скругленные углы */
+    padding: 10px 20px; /* Отступы внутри кнопки */
+    font-size: 16px; /* Размер шрифта */
+    cursor: pointer; /* Указатель курсора */
+    transition: background-color 0.3s ease, transform 0.2s ease; /* Плавные переходы */
+    display: inline-flex; /* Выравнивание текста по центру */
+    align-items: center; /* Выравнивание текста по центру по вертикали */
+    justify-content: center; /* Выравнивание текста по центру по горизонтали */
+}
+
+/* Стиль кнопки для основного действия */
+.btn-primary {
+    background-color: #007bff; /* Основной цвет фона */
+    color: #fff; /* Цвет текста */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Тень кнопки */
+}
+
+.btn-primary:hover {
+    background-color: #0056b3; /* Цвет фона при наведении */
+    transform: translateY(-2px); /* Немного поднимаем кнопку при наведении */
+}
+
+.btn-primary:active {
+    background-color: #004080; /* Цвет фона при нажатии */
+    transform: translateY(0); /* Возвращаем кнопку в исходное положение */
+}
+
+/* Кнопка "Выбрать всех" */
+#selectAll {
+    background-color: #007bff; /* Основной цвет фона (синий) */
+    color: #fff; /* Цвет текста */
+    border: none; /* Убираем границу */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Тень кнопки */
+    border-radius: 5px; /* Скругленные углы */
+    padding: 10px 20px; /* Отступы внутри кнопки */
+    font-size: 16px; /* Размер шрифта */
+    cursor: pointer; /* Указатель курсора */
+    transition: background-color 0.3s ease, transform 0.2s ease; /* Плавные переходы */
+}
+
+#selectAll:hover {
+    background-color: #0056b3; /* Цвет фона при наведении */
+    transform: translateY(-2px); /* Немного поднимаем кнопку при наведении */
+}
+
+#selectAll:active {
+    background-color: #004080; /* Цвет фона при нажатии */
+    transform: translateY(0); /* Возвращаем кнопку в исходное положение */
+}
+
+/* Стили для модального окна */
+.modal-excel {
+    display: none; /* Скрыто по умолчанию */
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6); /* Полупрозрачный фон */
+    justify-content: center;
+    align-items: center;
+}
+
+/* Стили для содержимого модального окна */
+.modal-content-excel {
+    position: relative;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    max-width: 1000px;
+    width: 100%;
+    margin: 5% auto;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    text-align: left;
+}
+
+/* Стили для кнопки закрытия */
+.close-btn-excel {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+/* Стили для таблицы */
+.modal-content-excel table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.modal-content-excel table th,
+.modal-content-excel table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+.styled-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 25px 0;
+    font-size: 16px;
+    text-align: left;
+}
+
+.styled-table th, .styled-table td {
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+}
+
+.styled-table th {
+    background-color: #f4f4f4;
+    font-weight: bold;
+    text-align: center;
+}
+
+.styled-table tr {
+    border-bottom: 1px solid #ddd;
+}
+
+.styled-table tr:nth-of-type(even) {
+    background-color: #f9f9f9;
+}
+
+.styled-table tr:hover {
+    background-color: #f1f1f1;
+}
+
+.styled-table td {
+    text-align: center;
+}
+
+/* Стили для модального окна импорта */
+.modal-excel-import {
+    display: none; /* Скрыто по умолчанию */
+    position: fixed; /* Остается на месте при прокрутке */
+    z-index: 1000; /* На переднем плане */
+    left: 0;
+    top: 0;
+    width: 100%; /* Полная ширина */
+    height: 100%; /* Полная высота */
+    background-color: rgba(0, 0, 0, 0.6); /* Полупрозрачный фон */
+    justify-content: center; /* Центрируем по горизонтали */
+    align-items: center; /* Центрируем по вертикали */
+}
+
+/* Стили для содержимого модального окна импорта */
+.modal-content-excel {
+    background-color: #fff;
+    padding: 20px; /* Отступы внутри модального окна */
+    border-radius: 8px;
+    max-width: 90%; /* Максимальная ширина */
+    width: auto; /* Автоширина */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Стили для заголовка модального окна */
+.modal-content-excel h4 {
+    margin: 0 0 15px; /* Отступы снизу */
+    font-size: 20px; /* Размер шрифта */
+}
+
+/* Стили для формы */
+.form-group {
+    margin-bottom: 15px; /* Отступы между элементами формы */
+}
+
+/* Стили для кнопки закрытия */
+.close-btn-excel {
+    top: 10px; /* Отступ сверху */
+    right: 10px; /* Отступ справа */
+    font-size: 24px; /* Размер шрифта */
+    cursor: pointer; /* Курсор в виде руки при наведении */
+}
+
+/* Стили для кнопки загрузки файла */
+.btn-primary {
+    margin-top: 10px; /* Отступ сверху */
+}

@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="../static/css/Dashboard_template_message.css" type="text/css">
+</head>
+<body>
+    {% extends "base_dashboard.html" %}
+
+    {% block content %}
+    <div class="container">
+        <div class="info-circle" onclick="showTooltip('generalTooltip')">!</div>
+
+        <form method="POST" action="{{ url_for('dashboard_template_message') }}" class="form">
+            <label for="crm_select" class="form-label">Выберите филиал:</label>
+            <select id="crm_select" name="crm_id" class="form-select" onchange="loadMessages(this.value); showSendTypeSelect();">
+                <option value="" disabled selected>Выберите филиал</option>
+                {% for crm in crm_systems %}
+                    <option value="{{ crm.id }}">{{ crm.title_branches }}</option>
+                {% endfor %}
+            </select>
+
+            <div id="message_blocks" class="message-blocks" style="display: none;">
+                <div class="message-block">
+                    <label for="message1" class="form-label">Приветственное сообщение</label>
+                    <textarea name="message1" id="message1" class="form-input"></textarea>
+                </div>
+                <div class="message-block">
+                    <label for="message2" class="form-label">Сообщение: Если оценка 5</label>
+                    <textarea name="message2" id="message2" class="form-input"></textarea>
+                </div>
+                <div class="message-block">
+                    <label for="message3" class="form-label">Сообщение: Если оценка от 1 до 4</label>
+                    <textarea name="message3" id="message3" class="form-input"></textarea>
+                </div>
+            </div>
+
+            <div id="send_type_container" style="display: none;">
+                <label for="send_type" class="form-label">Тип отправки:</label>
+                <select id="send_type" name="send_type" class="form-select" required>
+                    <option value="" disabled {% if not selected_send_type %}selected{% endif %}>Выберите тип отправки</option>
+                    <option value="multiple" {% if selected_send_type == 'multiple' %}selected{% endif %}>Многократный</option>
+                    <option value="single" {% if selected_send_type == 'single' %}selected{% endif %}>Одиночный</option>
+                </select>
+            </div>
+
+            <button type="submit" class="submit-btn">Сохранить</button>
+        </form>
+    </div>
+<script>
+function showSendTypeSelect() {
+    const crmSelect = document.getElementById('crm_select');
+    const sendTypeContainer = document.getElementById('send_type_container');
+
+    if (crmSelect.value) {
+        sendTypeContainer.style.display = 'block';
+    } else {
+        sendTypeContainer.style.display = 'none';
+    }
+}
+</script>
+
+
+    <!-- Модальные окна для подсказок -->
+    <div id="generalTooltip" class="modal-message">
+        <div class="modal-content-message">
+            <div class="modal-text">
+                <span class="close" onclick="hideTooltip('generalTooltip')">&times</span>
+                <h2>Основы использования шаблонов</h2>
+                <p>Если вы хотите использовать имя клиента, добавьте <code>ClientName</code>. Имя клиента будет записано в том виде, в каком оно приходит из вашей CRM системы.</p>
+                <p>Текст внутри фигурных скобок <code>{ }</code> выбирается случайным образом, за исключением <code>ClientName</code>. Вы можете комбинировать текст и шаблонные элементы для создания персонализированного сообщения. Внутри фигурных скобок можно указать несколько вариантов текста, которые будут случайным образом выбраны.</p>
+                <p><code>ClientName</code> – указывается без фигурных скобок.</p>
+                <p>Для добавления ссылки на ваш сайт в тексте, используйте <code>urls</code> в нужном месте, также без фигурных скобок.</p>
+                <p><code>urls</code> - эта ссылка, которую запросили у администратора сайта на ваш филиал</p>
+                <p><strong>Пример:</strong></p>
+                <p>Сообщение: <code>{Привет|Добрый день|Здравствуй|Приветствую|Рад видеть}! 👋 Это {пиццерия|наш сервис}, пожалуйста, {оцените|оставьте отзыв о} нашу работу.</code></p>
+                <p>Не забудьте писать шаблоны в соответствии с правилами русского языка и проверить их на наличие ошибок перед добавлением.</p>
+            </div>
+            <div class="arrow">
+                <span class="nav-arrow prev" onclick="showModal('modal5')">&#9664;</span>
+                <span class="nav-arrow next" onclick="showModal('modal2')">&#9654;</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно 1: Приветственное сообщение -->
+    <div id="modal1" class="modal-message">
+        <div class="modal-content-message">
+            <div class="modal-text">
+                <span class="close" onclick="hideTooltip('modal1')">&times;</span>
+                <h2>Приветственное сообщение</h2>
+                <p>Это окно отвечает за сообщение клиенту, когда он получил заказ.</p>
+                <p>Не забудьте включить в приветственное сообщение просьбу оставить отзыв и систему оценивания. Пример шаблона:</p>
+                <p><strong>Пример:</strong></p>
+                <p>Сообщение: <code>{Привет|Добрый день|Здравствуй}, {имя клиента}! Мы рады, что вы получили свой заказ. Пожалуйста, оцените нашу работу от 1 до 5: {1 - Плохо|2 - Неудовлетворительно|3 - Нормально|4 - Хорошо|5 - Великолепно}. Ваш отзыв очень важен для нас!</code></p>
+                <p>Этот шаблон позволяет вам приветствовать клиента, просить оставить отзыв и оценить качество услуги.</p>
+                <p>Обратите внимание: как вы напишете сообщение, включая абзацы и форматирование, так оно и придет клиенту.</p>
+            </div>
+            <div class="arrow">
+                <span class="nav-arrow prev" onclick="showModal('modal5')">&#9664;</span>
+                <span class="nav-arrow next" onclick="showModal('modal2')">&#9654;</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно 2: Если оценка 5 -->
+    <div id="modal2" class="modal-message">
+        <div class="modal-content-message">
+            <div class="modal-text">
+                <span class="close" onclick="hideTooltip('modal2')">&times;</span>
+                <h2>Если оценка 5</h2>
+                <p>Этот шаблон отвечает за сообщение клиенту, который поставил оценку 5.</p>
+                <p><strong>Пример:</strong></p>
+                <p>Сообщение: <code>{Спасибо за отличную оценку!|Мы рады, что вам все понравилось!} {Ваш отзыв вдохновляет нас продолжать работать лучше.|Ваше мнение очень важно для нас!}</code></p>
+                <p>Этот шаблон позволяет выразить благодарность клиенту за высокую оценку и укрепить отношения.</p>
+            </div>
+            <div class="arrow">
+                <span class="nav-arrow prev" onclick="showModal('modal5')">&#9664;</span>
+                <span class="nav-arrow next" onclick="showModal('modal3')">&#9654;</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно 3: Если оценка от 1 до 4 -->
+    <div id="modal3" class="modal-message">
+        <div class="modal-content-message">
+            <div class="modal-text">
+                <span class="close" onclick="hideTooltip('modal3')">&times;</span>
+                <h2>Если оценка от 1 до 4</h2>
+                <p>Этот шаблон отвечает за сообщение клиенту, который поставил оценку от 1 до 4.</p>
+                <p><strong>Пример:</strong></p>
+                <p>Сообщение: <code>{Нам очень жаль, что вам не понравилось.|Пожалуйста, дайте нам знать, как мы можем улучшиться.} {Ваш отзыв поможет нам стать лучше.|Мы ценим вашу обратную связь!}</code></p>
+                <p>Этот шаблон помогает выразить понимание и готовность улучшить качество услуг.</p>
+            </div>
+            <div class="arrow">
+                <span class="nav-arrow prev" onclick="showModal('modal2')">&#9664;</span>
+                <span class="nav-arrow next" onclick="showModal('modal4')">&#9654;</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно 4: Общая информация -->
+    <div id="modal4" class="modal-message">
+        <div class="modal-content-message">
+            <div class="modal-text">
+                <span class="close" onclick="hideTooltip('modal4')">&times;</span>
+                <h2>Общая информация</h2>
+                <p><strong>Ссылка на ваш филиал:</strong> Ссылка вставляется администратором сайта. Чтобы запросить ссылку, вы можете перейти в раздел <a href="#">филиалов</a> и нажать кнопку "Запрос ссылки".</p>
+                <p><strong>Промокоды:</strong> Промокоды вставляются по тому же принципу, что и слова для генерации: <code>{ПРОМОКОД: PROMO1 текст|ПРОМОКОД: PROMO2 текст}</code>.</p>
+                <p>Промокоды можно использовать без текста</p>
+                <p>Фигурные скобки: <code>{}</code> служат обозначением для выбора слов, а <code>|</code> — разделителем внутри фигурных скобок.</p>
+                <p><strong>Сценарии отправки сообщений:</strong></p>
+                <ul>
+                    <li><strong>Многократный:</strong> Клиентам при новых заказах будут поступать ваши сгенерированные сообщения.</li>
+                    <li><strong>Одиночный:</strong> Клиентам за всё время будет отправлено ваше сгенерированное сообщение только один раз, и при следующих заказах оно больше не будет поступать.</li>
+                </ul>
+            </div>
+            <div class="arrow">
+                <span class="nav-arrow prev" onclick="showModal('modal3')">&#9664;</span>
+                <span class="nav-arrow next" onclick="showModal('modal5')">&#9654;</span>
+            </div>
+        </div>
+    </div>
+
+    <script src="../static/js/Dashboard_template_message.js"></script>
+    {% endblock %}
+</body>
+</html>

@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="../static/css/Dashboard_branches.css">
+    <title>{% block title %}Панель администратора{% endblock %}</title>
+</head>
+<body>
+{% extends "base_dashboard.html" %}
+{%block new_branches%}
+    {% if subscription_expired %}
+        <p class="subscription-warning">Ваша подписка истекла. Подключение филиала невозможно.</p>
+    {% else %}
+        <a href="#" id="menu-add-CRM" class="button-link">Подключить ФИЛИАЛ</a>
+        <a href="#" onclick="openLinkRequestModal()">Заявка на ссылку</a>
+    {% endif %}
+{%endblock%}
+
+{% block content %}
+    <div class="main_content_branches">
+        <div class="instruction-link">
+            <a class="link" href="#" onclick="openHelpModal()">Инструкция</a>
+        </div>
+
+        <!-- Custom Modal for Link Request -->
+        <div id="linkRequestModal" class="modal" style="display:none;">
+            <div class="modal-content">
+                <span class="close-btn" onclick="closeLinkRequestModal()">&times;</span>
+                <h3>Заявка на ссылку</h3>
+                <form id="linkRequestForm" action="/GetBranchesLink" method="POST">
+                    <label for="branchSelect">Выберите филиал:</label>
+                    <select id="branchSelect" name="crm_id">
+                        {% for crm in crm_systems %}
+                            <option value="{{ crm.id }}">{{ crm.title_branches }}</option>
+                        {% endfor %}
+                    </select>
+
+                    <label for="websiteLink">Ссылка на сайт:</label>
+                    <input type="text" id="websiteLink" name="link" placeholder="Введите ссылку на сайт" required>
+
+                    <button type="submit">Отправить заявку</button>
+                </form>
+            </div>
+        </div>
+
+<!-- Модальное окно для инструкции -->
+<div id="helpModal" class="HelpModal">
+    <div class="help-modal-content">
+        <span class="close-btn-help" onclick="closeHelpModal()">&times;</span>
+        <h4>Краткое объяснение</h4>
+        <p>Здесь вы можете увидеть пример инструкции по работе с вашими филиалами</p>
+        <ul>
+            <li>WhatsApp - подключается сессия WhatsApp (Можно использовать для переподключения)</li>
+            <li>В настройках лежат: Изменить время, Создать токен, Включить, Отключить</li>
+            <li>Изменить время: задержка перед отправкой сообщения клиенту. Если задержки нет, то филиал не будет работать</li>
+            <li>Создать токен - это для подключения вашей CRM системы к нашей (Нужен тому кто подключает)</li>
+            <li>Включить/Отключить - Включаете или отключает данный филиал</li>
+        </ul>
+        <h5>Пример тела запроса - TOKEN нужен для подключения вашей CRM</h5>
+        <pre><code>
+{
+    "Key": "TOKEN",
+    "User": {
+        "Full_name": "Fullname_client",
+        "Phone": "Phone_number_client"
+    }
+}
+        </code></pre>
+    </div>
+</div>
+
+        <ul>
+            {% for crm_item in crm_systems %}
+            <li>
+                <div class="crm-info">
+                    <div><strong>CRM Система:</strong> {{ crm_item.crm.crm_system }}</div>
+                    <div><strong>Название филиала:</strong> {{ crm_item.crm.title_branches }}</div>
+                    <div><strong>Описание филиала:</strong> {{ crm_item.crm.description_branches }}</div>
+                    <div><strong>Ссылка на ТГ бота:</strong> <a class="link" href="{{ crm_item.crm.link_tgbot }}">{{ crm_item.crm.link_tgbot }}</a></div>
+                    {% if crm_item.crm.status_job %}
+                        <div><strong>Статус работы:</strong> <span style="color: #007bff">В работе</span></div>
+                    {% else %}
+                        <div><strong>Статус работы:</strong> <span style="color: red">Отключен</span></div>
+                    {% endif %}
+                    <div class="time-message">
+                        {% if crm_item.crm.time_send is none %}
+                            <div style="color: red">Время отправки не назначено</div>
+                        {% else %}
+                            <div>Время отправки сообщений: {{ crm_item.crm.time_send }} мин.</div>
+                        {% endif %}
+                    </div>
+                    <strong>Номер телефона WhatsApp:</strong>
+                    <span>
+                        {% if crm_item.phone_number %}
+                            {{ crm_item.phone_number }}
+                        {% else %}
+                            Номер не найден
+                        {% endif %}
+                    </span>
+                    <div>
+                        <strong>Ссылка на филиал:</strong>
+                        {% if crm_item.crm.url_website %}
+                            <a href="{{ crm_item.crm.url_website }}" target="_blank">{{ crm_item.crm.url_website }}</a>
+                        {% else %}
+                            Отсутствует
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="button-container">
+                    <button class="activate-whatsapp" onclick="openPhoneModal({{ crm_item.crm.id }})" {% if subscription_expired %}disabled{% endif %}>Подключить WhatsApp</button>
+                    <button class="deactivate-whatsapp" onclick="openDeactivateModal({{ crm_item.crm.id }})" {% if subscription_expired %}disabled{% endif %}>Отключить WhatsApp</button>
+                    <div class="dropdown-branches">
+                        <button class="dropdown-button-branches" {% if subscription_expired %}disabled{% endif %}>Настройки</button>
+                        <div class="dropdown-content-branches">
+                            <form class="bot_change">
+                                <input type="hidden" name="telegram_token" value="{{ crm_item.crm.tg_token }}">
+                                <button type="button" onclick="openEditModal({{ crm_item.crm.id }})" {% if subscription_expired %}disabled{% endif %}>Изменить время</button>
+                            </form>
+                            <form>
+                                <button type="button" onclick="createWord({{ crm_item.crm.id }})" {% if subscription_expired %}disabled{% endif %}>Создать/Посмотреть токен</button>
+                            </form>
+                            <form class="branch_setting" method="POST" action="{{ url_for('restart_bot') }}">
+                                <input type="hidden" name="crm_id" value="{{ crm_item.crm.id }}">
+                                <input type="hidden" name="telegram_token" value="{{ crm_item.crm.tg_token }}">
+                                <button type="submit" {% if subscription_expired %}disabled{% endif %}>Включить</button>
+                            </form>
+                            <form class="bot_disable" method="POST" action="{{ url_for('stop_bot') }}">
+                                <input type="hidden" name="crm_id" value="{{ crm_item.crm.id }}">
+                                <input type="hidden" name="telegram_token" value="{{ crm_item.crm.tg_token }}">
+                                <button type="submit" {% if subscription_expired %}disabled{% endif %}>Отключить</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </li>
+            {% else %}
+            <li>У вас нет подключенных CRM-систем.</li>
+            {% endfor %}
+        </ul>
+
+    </div>
+
+    <!-- Модальное окно для отключения WhatsApp -->
+    <div id="deactivateModal" class="modal-disconnect" style="display:none;">
+        <div class="modal-content-disconnect">
+            <span class="close-btn" onclick="closeDeactivateModal()">&times;</span>
+            <h4>Отключение сессии WhatsApp</h4>
+            <p>Нажав кнопку «Отключить», вы завершите текущую сессию WhatsApp.</p>
+            <p>Все клиенты будут переведены в активный статус.</p>
+            <p>Эта процедура гарантирует, что сессия будет немедленно удалена.</p>
+            <form id="deactivateForm">
+                <input type="hidden" id="deactivateCrmId" name="crm_id" value="">
+                <button type="submit">Отключить</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Модальное окно для выбора времени -->
+    <div id="editModal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeEditModal()">&times;</span>
+            <h2>Выберите время</h2>
+            <h4>Время, через которое придет уведомление</h4>
+            <form id="editForm">
+                <select id="timeSelect" name="timeSelect">
+                    <option value="5">5 минут</option>
+                    <option value="10">10 минут</option>
+                    <option value="15">15 минут</option>
+                    <option value="30">30 минут</option>
+                    <option value="45">45 минут</option>
+                    <option value="60">1 час</option>
+                    <option value="180">3 часа</option>
+                    <option value="540">9 часов</option>
+                    <option value="720">12 часов</option>
+                    <option value="1440">1 день</option>
+                </select>
+                <input type="hidden" id="crmId" value="">
+                <button type="submit" {% if subscription_expired %}disabled{% endif %}>Сохранить</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="modal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+            <h3>Cкопируйте и сохраните этот ключ</h3>
+            <button id="copy-button" onclick="copyToClipboard()">Скопировать ключ</button>
+            <p id="copy-message" style="display:none;">Текст скопирован в буфер обмена!</p>
+        </div>
+    </div>
+
+    <div id="phoneModal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closePhoneModal()">&times;</span>
+            <h3>Подключение WhatsApp</h3>
+            <form id="phoneForm">
+                <input type="hidden" id="crmId" name="crm_id" value="">
+                <label for="phone">Введите номер телефона:</label>
+                <input type="text" id="phone" name="phone" placeholder="+71234567890" required>
+                <button type="submit">Подключить</button>
+            </form>
+            <div id="authMessage" style="display:none; margin-top: 20px; color: green;">
+                <p>Код авторизации придет вам на почту, это окно можно закрыть.</p>
+                <p>Код надо будет ввести в мобильной версии WhatsApp.</p>
+                <p>У вас будет 5 минут пока действует код.</p>
+            </div>
+        </div>
+    </div>
+    <script src="../static/js/Dashboard_branches.js"></script>
+{% endblock %}
+</body>
+</html>

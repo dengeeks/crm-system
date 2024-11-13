@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/Base_DashBoard.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title>{% block title %}Панель администратора{% endblock %}</title>
+</head>
+<body>
+{% block header %}
+<header class="header">
+    <div class="menu-toggle" id="menu-toggle">
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+    <div class="link-in-header">
+        <div class="menu-add-CRM">
+            {% block new_branches %} {% endblock %}
+        </div>
+    </div>
+
+    <div class="user-info">
+        <div class="user-menu" id="user-menu">
+            <span>{{ first_name }}</span>
+            <div class="user-dropdown-content" id="dropdown-content">
+                <a href="#">Профиль</a>
+                <a href="/Dashboard_settings">Настройки</a>
+                <a href="{{ url_for('logout') }}">Выход</a>
+            </div>
+        </div>
+    </div>
+</header>
+{% endblock %}
+
+<!-- Модальное окно -->
+<div id="crm-modal" class="modal-branches">
+    <div class="modal-content-branches">
+        <span class="close">&times;</span>
+        <h2>Подключить CRM</h2>
+        <form id="crm-form" action="/add_branches" method="POST">
+            <label for="crm-system">Выберите CRM систему:</label>
+            <select id="crm-system" name="crm-system" required>
+                <option value="" disabled selected>Выберите систему</option>
+                <option value="1C">1C</option>
+                <option value="Битрикс24">Битрикс24</option>
+                <option value="IIKO">IIKO</option>
+                <option value="AMO CRM">AMO CRM</option>
+                <option value="yclients">yclients</option>
+                <option value="google-sheets">Google Sheets</option>
+            </select>
+            <input name="Title_branches" required placeholder="Укажите название вашего филиала">
+            <input name="Description_branches" placeholder="Описание к вашему филиалу (Необязательно)">
+            <input name="Telegram_bot" disabled required placeholder="Введите TOKEN от телеграм бота (Скоро)">
+            <button type="submit" class="submit-button">Добавить</button>
+        </form>
+    </div>
+</div>
+<div class="main_part">
+    <div class="side_menu" id="side_menu">
+        <nav>
+            <ul>
+                <li><a href="/Dashboard_statistics"><i class="fas fa-chart-bar icon"></i> Дашборд</a></li>
+                <li><a href="/Dashboard_branches"><i class="fas fa-home icon"></i> Филиалы</a></li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle"><i class="fas fa-comments icon"></i> Коммуникация <i class="fas fa-chevron-down dropdown-icon"></i></a>
+                    <ul class="dropdown-content">
+                        <li><a href="/Dashboard_chats/WhatsApp">Чат с клиентами</a></li>
+                        <li><a href="/Dashboard_MessageLog">Журнал сообщений</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle"><i class="fas fa-pen icon"></i> Работа с отзывами <i class="fas fa-chevron-down dropdown-icon"></i></a>
+                    <ul class="dropdown-content">
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle">Запрос отзыва (В разработке) <i class="fas fa-chevron-down dropdown-icon"></i></a>
+                            <ul class="dropdown-content">
+                                <li><a href="/Dashboard_SendManyClient">Отправить списком</a></li>
+                            </ul>
+                            <a href="/Dashboard/TemplateMessage">Настройка запроса</a>
+                        </li>
+                    </ul>
+                </li>
+                <li><a href="/Dashboard_settings"><i class="fas fa-cog icon"></i> Настройки</a></li>
+                <li><a href="#"><i class="fas fa-bell icon"></i> Уведомления (В разработке)</a></li>
+                <li><a href="#"><i class="fas fa-arrow-up icon"></i> Маркетинг (В разработке)</a></li>
+                <li><a href="#"><i class="fas fa-ban icon"></i> Стоп лист (В разработке)</a></li>
+                <li><a href="#"><i class="fas fa-question-circle icon"></i> Справка (В разработке)</a></li>
+            </ul>
+        </nav>
+    </div>
+    <div class="main_board" id="main_board">
+      {% block content %}
+      <!-- Здесь будет отображаться специфический контент для страницы -->
+      {% endblock %}
+    </div>
+</div>
+
+<script src="{{ url_for('static', filename='js/pattern_admin_board.js') }}"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const userMenu = document.getElementById('user-menu');
+        const dropdownContent = document.getElementById('dropdown-content');
+
+        document.addEventListener('click', function(event) {
+            if (!userMenu.contains(event.target)) {
+                dropdownContent.style.display = 'none';
+            }
+        });
+
+        userMenu.addEventListener('mouseover', function() {
+            dropdownContent.style.display = 'block';
+        });
+
+        userMenu.addEventListener('mouseleave', function() {
+            dropdownContent.style.display = 'none';
+        });
+
+        const crmModal = document.getElementById('crm-modal');
+        const btn = document.getElementById('menu-add-CRM');
+        const close = document.getElementsByClassName('close')[0];
+
+        // Скрываем модальное окно при загрузке страницы
+        crmModal.style.display = 'none';
+
+        btn.onclick = function() {
+            crmModal.style.display = 'flex'; // Используем flex для центрирования
+        }
+
+        close.onclick = function() {
+            crmModal.style.display = 'none';
+        }
+
+        window.onclick = function(event) {
+            if (event.target == crmModal) {
+                crmModal.style.display = 'none';
+            }
+        }
+    });
+</script>
+</body>
+</html>

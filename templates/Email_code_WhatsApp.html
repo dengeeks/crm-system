@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Код активации</title>
+</head>
+<body style="font-family: Arial, sans-serif; background-color: #f4f4f4; margin: 0; padding: 0;">
+    <div style="background-color: #ffffff; padding: 20px; margin: 20px auto; max-width: 600px; border-radius: 8px; box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);">
+        <h3 style="color: black; line-height: 1.5;">Здравствуйте!</h3>
+        <p style="color: #666666; font-size: 16px; line-height: 1.5;">Ваш код активации: <strong>{{ code }}</strong></p>
+        <div style="background-color: #f9f9f9; border: 1px solid #dddddd; padding: 10px; font-size: 24px; text-align: center; margin: 20px 0;">
+            {{ code }}
+        </div>
+        <p>Код надо ввести по этому пути</p>
+        <p style="color: #666666; font-size: 16px; line-height: 1.5;">Три точки -> Связанные устройства -> Кнопка Связанные устройства -> Связать по номеру телефона</p>
+        <p style="color: #666666; font-size: 16px; line-height: 1.5;">Этот код действителен в течение <strong>{{ time }}</strong> минут.</p>
+        <p style="color: #666666; font-size: 16px; line-height: 1.5;">После этого срока код станет недоступен для использования.</p>
+
+        <div style="text-align: center; font-size: 12px; color: #aaaaaa; margin-top: 30px; padding-top: 20px; border-top: 1px solid #dddddd;">
+            <p>С уважением,<br>Ваша служба поддержки</p>
+            <p>© 2024 Ваша компания</p>
+        </div>
+    </div>
+</body>
+</html>

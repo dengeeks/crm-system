@@ -1,0 +1,250 @@
+.container {
+    margin-left: 5%;
+    margin-right: 5%;
+    padding: 1%;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    z-index: 0;
+}
+
+.greeting {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.form-label {
+    font-size: 14px;
+    color: #333;
+    display: flex;
+    justify-content: center; /* Центрирование текста по горизонтали */
+    text-align: center; /* Центрирование текста по горизонтали */
+}
+
+.form-select, .form-input {
+    width: 100%;
+    padding: 10px;
+    border: 1.5px #171717 solid;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.form-select {
+    font-size: 14px;
+}
+
+.form-input {
+    height: 100px; /* Устанавливаем высоту для textarea */
+    resize: vertical; /* Позволяет изменять высоту textarea */
+}
+
+.message-blocks {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 20px; /* Отступ снизу от блока */
+    height: 400px;
+}
+
+.message-block {
+    flex: 1; /* Убедитесь, что блок занимает доступное пространство */
+    display: flex; /* Установите flex для вертикального выравнивания содержимого */
+    flex-direction: column; /* Вертикальное расположение содержимого */
+    overflow-y: auto; /* Прокрутка при переполнении */
+}
+
+.message-block textarea {
+    flex: 1; /* Занимает всю доступную ширину */
+    width: 100%; /* Занимает всю ширину блока */
+    margin: 10px 0; /* Отступы сверху и снизу */
+    padding: 10px; /* Отступы внутри textarea */
+    box-sizing: border-box; /* Включаем padding в общую ширину */
+    resize: none; /* Отключаем изменение размера textarea пользователем */
+}
+
+.submit-btn {
+    align-self: center;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    background-color: #007bff;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.submit-btn:hover {
+    background-color: #0056b3;
+}
+
+/* Стили для символа ! в круге */
+.info-circle {
+    top: 10px;
+    left: 10px;
+    width: 30px;
+    height: 30px;
+    background-color: #007bff;
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    cursor: pointer;
+    z-index: 1000; /* Убедитесь, что иконка находится поверх других элементов */
+}
+
+/* Основные стили для модального окна */
+.modal-message {
+    display: none;
+    position: fixed; /* Окно фиксировано относительно экрана */
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    transition: opacity 0.3s ease;
+}
+
+/* Содержимое модального окна */
+.modal-content-message {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    background-color: #fff;
+    margin: auto; /* Центрирование по горизонтали и вертикали */
+    text-align: center;
+    line-height: 1.5;
+    border: 1px solid #888;
+    border-radius: 10px;
+    box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+    max-width: 1000px; /* Максимальная ширина модального окна */
+    height: 600px; /* Фиксированная высота модального окна */
+    top: 50%;
+    transform: translateY(-50%); /* Смещение на половину высоты для центрирования */
+}
+
+/* Внутренние стили для содержимого */
+.modal-content-inner {
+    max-height: calc(100% - 60px); /* Учитываем высоту заголовка и кнопок */
+    overflow-y: auto; /* Добавляем вертикальную прокрутку */
+}
+
+/* Стили для текста модального окна */
+.modal-text {
+    padding: 20px;
+    text-align: left;
+    margin-bottom: 20px;
+}
+
+.modal-text span {
+    top: 0px;
+    right: 10px;
+}
+
+.modal-text li {
+    list-style: none;
+}
+
+/* Стили для заголовков */
+.modal-content-message h2 {
+    font-size: 24px; /* Размер заголовка */
+    color: #007bff; /* Цвет заголовка */
+    margin-bottom: 20px; /* Отступ снизу */
+    font-weight: 600; /* Жирное начертание */
+}
+
+/* Стили для параграфов */
+.modal-content-message p {
+    margin-bottom: 15px; /* Отступ снизу для параграфов */
+    line-height: 1.6; /* Высота строки */
+}
+
+/* Стили для кода */
+.modal-content-message code {
+    font-family: "Arial", "sans-serif";
+    background-color: #f4f4f4; /* Цвет фона для кода */
+    border-radius: 4px; /* Округление углов */
+    padding: 4px 8px; /* Отступы */
+    font-size: 14px; /* Размер шрифта */
+    color: #1E90FF;
+}
+
+/* Стрелочки навигации */
+.nav-arrow {
+    position: absolute; /* Абсолютное позиционирование */
+    bottom: 10px; /* Прибиваем стрелки к "полу" контейнера */
+    font-size: 28px; /* Размер стрелочек */
+    color: #007bff; /* Цвет стрелочек */
+    cursor: pointer;
+    user-select: none;
+    z-index: 1001; /* Устанавливаем приоритет, чтобы стрелки были поверх содержимого */
+}
+
+.nav-arrow.prev {
+    left: 20px; /* Отступ слева для стрелки "назад" */
+}
+
+.nav-arrow.next {
+    right: 20px; /* Отступ справа для стрелки "вперед" */
+}
+
+/* Кнопка закрытия */
+.close {
+    color: #aaa;
+    position: absolute; /* Абсолютное позиционирование */
+    top: 10px; /* Отступ сверху */
+    right: 10px; /* Отступ справа */
+    font-size: 32px; /* Размер кнопки */
+    font-weight: bold;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.close:hover,
+.close:focus {
+    color: #000;
+    text-decoration: none;
+}
+
+/* Специфические стили для модального окна 6 */
+.modal-message.modal6 {
+    width: 80%;
+    max-width: 800px; /* Максимальная ширина модального окна */
+    height: auto;
+    min-height: 300px; /* Минимальная высота модального окна */
+}
+
+.modal-content-message.modal6 {
+    width: 100%;
+    height: auto; /* Позволяет высоте адаптироваться к содержимому */
+    min-height: 300px;
+}
+
+.modal-content-message.modal6 .modal-text ul {
+    margin-left: 20px;
+}
+
+.modal-content.modal6 .modal-text p {
+    margin-bottom: 10px; /* Отступ снизу для параграфов */
+}
+
+#send_type_container {
+    margin-top: 20px; /* Отступ сверху для разделения с предыдущими элементами */
+}
+
+.form-select {
+    top: 100%; /* Позиционируем под блоком */
+    left: 0;
+    width: 100%; /* Ширина select равна ширине контейнера */
+}

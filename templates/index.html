@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Продвижение Услуг</title>
+    <link rel="stylesheet" href="../static/css/index.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo"><a href="#home">ABC</a></div>
+            <ul class="nav-links">
+                <li class="dropdown">
+                    <a href="#features">Возможности</a>
+                    <div class="dropdown-content">
+                        <div class="column">
+                            <a href="#map-promotion">Продвижение на картах</a>
+                            <a href="#marketing-mailing">Маркетинговая рассылка</a>
+                            <a href="#upsales">Допродажи</a>
+                        </div>
+                        <div class="column">
+                            <a href="#auto-notifications">Автоматические уведомления</a>
+                            <a href="#client-channel">Канал общения с клиентами</a>
+                            <a href="#negative-reviews">Перехват негативных отзывов</a>
+                        </div>
+                        <div class="column">
+                            <a href="#client-exchange">Обмен клиентами</a>
+                            <a href="#rating-widget">Виджет рейтинга на сайт</a>
+                        </div>
+                    </div>
+                </li>
+                <li class="dropdown">
+                    <a href="#integrations">Интеграции</a>
+                    <div class="dropdown-content">
+                        <div class="column">
+                            <div class="column-title">CRM</div>
+                            <div class="separator"></div>
+                            <a href="#crm1">Интеграция 1</a>
+                            <a href="#crm2">Интеграция 2</a>
+                            <a href="#crm3">Интеграция 3</a>
+                        </div>
+                        <div class="column">
+                            <div class="column-title">ОНЛАЙН-ПЛАТФОРМЫ</div>
+                            <div class="separator"></div>
+                            <a href="#platform1">Платформа 1</a>
+                            <a href="#platform2">Платформа 2</a>
+                            <a href="#platform3">Платформа 3</a>
+                        </div>
+                    </div>
+                </li>
+                <li><a href="#services">Направления</a></li>
+                <li><a href="#blog">Блог</a></li>
+                <li><a href="#partners">Партнерская программа</a></li>
+                <li><span class="phone">8-(888)-888-88-88</span></li>
+                <li><a href="/Login" class="login-button">Войти</a></li>
+                <li><a href="#contact" class="contact-button">Связаться</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <div class="first-section">
+            <div class="left-part_first">
+                <div class="text_1">
+                    <h1>Сервис №1 для продвижения локального бизнеса</h1>
+                </div>
+                <div class="text_2">
+                    <p>Станьте заметнее для своих клиентов</p>
+                </div>
+                <div class="btn_call_div">
+                    <a href="#" class="btn_call_a" id="openModal">
+                        <p class="btn_call_p">Оставить заявку</p>
+                    </a>
+                </div>
+            </div>
+            <div class="right-part_first">
+                <img src="../static/images/woman_with_phone.png" class="first-img">
+            </div>
+        </div>
+    </main>
+
+    <!-- Модальное окно -->
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <span class="close" id="closeModal">&times;</span>
+            <h2>Форма заявки</h2>
+            <form id="requestForm" action="/GetElectronicApplication" method="POST">
+                <label for="full_name">ФИО:</label>
+                <input type="text" id="full_name" name="full_name" placeholder="Введите ваше ФИО" required>
+
+                <label for="email">Почта:</label>
+                <input type="email" id="email" name="email" placeholder="Введите вашу почту" required>
+
+                <label for="phone_number">Номер телефона:</label>
+                <input type="tel" id="phone_number" name="phone_number" placeholder="Введите номер телефона" required>
+
+                <label for="company_name">Название компании:</label>
+                <input type="text" id="company_name" name="company_name" placeholder="Введите название вашей компании" required>
+
+                <label for="description">Описание:</label>
+                <textarea id="description" name="description" placeholder="Введите описание (Необязательно)"></textarea>
+
+                <button type="submit">Отправить</button>
+            </form>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 Продвижение Услуг. Все права защищены.</p>
+    </footer>
+
+    <script>
+        // Открытие модального окна
+        var modal = document.getElementById("myModal");
+        var btn = document.getElementById("openModal");
+        var span = document.getElementById("closeModal");
+
+        btn.onclick = function() {
+            modal.style.display = "block";
+        }
+
+        // Закрытие модального окна
+        span.onclick = function() {
+            modal.style.display = "none";
+        }
+
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+    </script>
+</body>
+</html>

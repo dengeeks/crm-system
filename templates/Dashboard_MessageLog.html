@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../static/css/Dashboard_MessageLog.css" type="text/css">
+    <title>{% block title %}Панель администратора{% endblock %}</title>
+    <style>
+        /* Ваши стили */
+    </style>
+</head>
+<body>
+    {% extends "base_dashboard.html" %}
+
+    {% block content %}
+    <div class="crm-selector-container">
+        <form method="POST" action="{{ url_for('dashboard_messagelog') }}">
+            <label for="crm">Выберите филиал:</label>
+            <select id="crm" name="crm_id">
+                {% for crm in crms %}
+                    <option value="{{ crm.id }}" {% if crm.id == selected_crm_id %}selected{% endif %}>{{ crm.title_branches }}</option>
+                {% endfor %}
+            </select>
+            <button type="submit">Показать данные</button>
+        </form>
+    </div>
+
+    {% if data %}
+        <table>
+                <thead>
+                    <tr>
+                        <th>Номер телефона</th>
+                        <th>Telegram ID</th>
+                        <th>Отправленное сообщение</th>
+                        <th>Дата отправки</th>
+                        <th>Type Sender</th>
+                        <th>Type Send</th>
+                    </tr>
+                </thead>
+        </table>
+        <div class="table-container">
+            <table>
+                <tbody>
+                    {% for item in data %}
+                        <tr>
+                            <td>{{ item.phone_number }}</td>
+                            <td>{{ item.telegram_id }}</td>
+                            <td class="message-cell">{{ item.message|safe }}</td>
+                            <td>{{ item.send_date }}</td>
+                            <td>{{ item.type_sender }}</td>
+                            <td>{{ item.type_send }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
+    {% endblock %}
+</body>
+</html>

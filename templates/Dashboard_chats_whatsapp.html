@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="../static/css/Dashboard_chats_whatsapp.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title>{% block title %}Панель администратора{% endblock %}</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        /* Стили для модального окна */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgb(0,0,0);
+            background-color: rgba(0,0,0,0.4);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+{% extends "base_dashboard.html" %}
+
+{% block content %}
+    <div class="main_content_chats">
+        <!-- Первая часть -->
+        <div class="section-1">
+            <form id="crm-form" action="/refresh_chats" method="post">
+                <div class="tables">
+                    <div class="table">
+                        <h3><a href="/Dashboard_chats/WhatsApp">WhatsApp</a></h3>
+                    </div>
+                    <div class="table">
+                        <a class="refresh-button" id="instruction-button">Инструкция</a>
+                    </div>
+                    <div class="table">
+                        <button type="submit" class="refresh-button" {% if subscription_expired %}disabled{% endif %}>Обновить чаты</button>
+                    </div>
+                </div>
+                <!-- Выпадающий список CRM-систем -->
+                <div class="dropdown">
+                    <label for="crm_id">Выберите филиал</label>
+                    <select name="crm_id" id="crm_id">
+                        <option value="" disabled selected>Выберите филиал</option> <!-- Опция без выбора -->
+                        {% for crm in crm_systems %}
+                            <option value="{{ crm.id }}">{{ crm.title_branches }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </form>
+            <div id="messages-container">
+                <!-- Здесь будут отображаться заголовки сообщений -->
+            </div>
+        </div>
+
+        <!-- Вторая часть -->
+        <div class="section-2" id="chat-container">
+
+        </div>
+    </div>
+
+    <!-- Модальное окно -->
+    <div id="instruction-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h3>Как использовать кнопку «Обновить чаты»</h3>
+            <p>Когда вы нажимаете кнопку «Обновить чаты», на сервере запускается процесс получения новых чатов из WhatsApp.</p>
+            <p>Выбор чатов производится из филиала, который вы указали в выпадающем списке «Выберите филиал».</p>
+            <p>На данный момент уведомлений о завершении загрузки чатов нет, но мы планируем добавить их в будущем.</p>
+            <p>Обычно процесс обновления чатов занимает от 5 до 10 минут.</p>
+            <p>Если вы хотите получить новые чаты, просто нажмите кнопку «Обновить чаты» еще раз.</p>
+            <p>На данный момент автоматического сбора чатов нет, но мы работаем над добавлением этой функции в будущем.</p>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            // Функция открытия модального окна
+            $("#instruction-button").click(function () {
+                $("#instruction-modal").show();
+            });
+
+            // Функция закрытия модального окна
+            $(".close").click(function () {
+                $("#instruction-modal").hide();
+            });
+
+            // Закрытие модального окна при клике вне его
+            $(window).click(function (event) {
+                if ($(event.target).is("#instruction-modal")) {
+                    $("#instruction-modal").hide();
+                }
+            });
+
+            // Вызов функции loadChats при изменении выбора CRM-системы
+            $("#crm_id").change(function () {
+                loadChats(); // Вызываем функцию загрузки чатов
+            });
+
+            // Вызов функции loadChatMessages при клике на определенный чат
+            $(document).on('click', '.message-block', function() {
+                var chatId = $(this).data('chat-id');
+                loadChatMessages(chatId); // Вызываем функцию загрузки сообщений чата
+            });
+
+            // Функция для загрузки чатов
+            function loadChats() {
+                var selectedCrmId = $("#crm_id").val(); // Получаем выбранный ID CRM системы
+                $.ajax({
+                    url: "/get_chats/" + selectedCrmId,
+                    method: "GET",
+                    success: function (data) {
+                        var messagesContainer = $("#messages-container");
+                        messagesContainer.empty();
+                        data.forEach(function (chat) {
+                            messagesContainer.append(
+                                "<div class='message-block' data-chat-id='" + chat.id + "'>" +
+                                    "<div class='message-title'>" + chat.title_message + "</div>" +
+                                    "<div class='message-text'>" + chat.text_message + "</div>" +
+                                "</div>"
+                            );
+                        });
+                    },
+                    error: function (error) {
+                        console.error("Error fetching chats:", error);
+                    }
+                });
+            }
+
+            function loadChatMessages(chatId) {
+                $.ajax({
+                    url: "/get_chat_messages/" + chatId,
+                    method: "GET",
+                    success: function (data) {
+                        var chatContainer = $("#chat-container");
+                        chatContainer.empty();
+                        var currentClass = ''; // Текущий класс (left/right)
+                        var currentMessage = ''; // Для хранения текущего сообщения
+
+                        data.forEach(function (message) {
+                            var lines = message.text_message.split('\n');
+                            lines.forEach(function (line, index) {
+                                // Определяем отправителя по первой строке
+                                if (index === 0 || /\d{2}:\d{2} \(\d{2}\.\d{2}\.\d{4}\)$/.test(lines[index - 1])) {
+                                    // Сохраняем текущее сообщение перед сменой отправителя
+                                    if (currentMessage) {
+                                        // Проверяем, не пустое ли текущее сообщение перед добавлением
+                                        if (currentMessage.trim() !== '') {
+                                            chatContainer.append(
+                                                "<div class='chat-message " + currentClass + "'>" +
+                                                "<div class='chat-message-text'>" + currentMessage.trim() + "</div>" +
+                                                "</div>"
+                                            );
+                                        }
+                                        currentMessage = ''; // Очищаем текущее сообщение
+                                    }
+                                    // Определяем класс для сообщения
+                                    currentClass = line.startsWith('Вы:') ? 'right' : 'left';
+                                }
+
+                                // Добавляем строку в текущее сообщение
+                                currentMessage += (line + '\n');
+
+                                // Проверяем, является ли строка концом сообщения
+                                var isEndOfMessage = /\d{2}:\d{2} \(\d{2}\.\d{2}\.\d{4}\)$/.test(line);
+
+                                // Если конец сообщения достигнут, добавляем блок на страницу
+                                if (isEndOfMessage) {
+                                    // Проверяем, не пустое ли текущее сообщение перед добавлением
+                                    if (currentMessage.trim() !== '') {
+                                        chatContainer.append(
+                                            "<div class='chat-message " + currentClass + "'>" +
+                                            "<div class='chat-message-text'>" + currentMessage.trim() + "</div>" +
+                                            "</div>"
+                                        );
+                                    }
+                                    currentMessage = ''; // Очищаем текущее сообщение
+                                }
+                            });
+                        });
+
+                        // Проверяем, есть ли оставшееся сообщение после завершения цикла
+                        if (currentMessage && currentMessage.trim() !== '') {
+                            chatContainer.append(
+                                "<div class='chat-message " + currentClass + "'>" +
+                                "<div class='chat-message-text'>" + currentMessage.trim() + "</div>" +
+                                "</div>"
+                            );
+                        }
+                    },
+                    error: function (error) {
+                        console.error("Error fetching chat messages:", error);
+                    }
+                });
+            }
+        });
+    </script>
+{% endblock %}
+</body>
+</html>
