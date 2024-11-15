@@ -38,11 +38,16 @@ def get_ChatWhatsApp(user_id, crm_id):
         # Настройки для Firefox Browser
         options = Options()
         options.log.level = "trace"
+        options.add_argument("--disable-extensions")
+        options.add_argument("--headless")
         options.add_argument(f"-profile")
         options.add_argument(f"{whatsapp_session}")
 
         # Установка и запуск Firefox
-        service = Service(GeckoDriverManager().install())
+        # service = Service(GeckoDriverManager().install())
+        service = Service(executable_path = '/usr/local/bin/geckodriver')
+
+
         driver = webdriver.Firefox(service=service, options=options)
 
         # Инициализируем клиентов данной CRM системы

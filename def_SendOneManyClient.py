@@ -1,61 +1,63 @@
-import re
 import os
+import re
 import time
-import random
-import asyncio
+from datetime import datetime
+
 import psycopg2
+from selenium import webdriver
+from selenium.webdriver import Keys
+from selenium.webdriver.common.by import By
+from selenium.webdriver.firefox.options import Options
+from selenium.webdriver.firefox.service import Service
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait
+from webdriver_manager.firefox import GeckoDriverManager
 
 from Env_Config import Database_setting, GitHub_setting, Type_send_msg
 
-from datetime import datetime, timedelta
-
-from selenium.webdriver import Keys
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from selenium import webdriver
-from selenium.webdriver.firefox.service import Service
-from selenium.webdriver.firefox.options import Options
-from webdriver_manager.firefox import GeckoDriverManager
-
 os.environ['TOKEN_WEBDRIVER'] = GitHub_setting['Token_webdriver']
+
 
 def send_manyoneclient(user_id, crm_id, phone_numbers, message):
     try:
         # Подключение к базе данных
         connect = psycopg2.connect(
-            user=Database_setting['user'],
-            password=Database_setting['password'],
-            host=Database_setting['host'],
-            port=Database_setting['port'],
-            database=Database_setting['database']
+            user = Database_setting['user'],
+            password = Database_setting['password'],
+            host = Database_setting['host'],
+            port = Database_setting['port'],
+            database = Database_setting['database']
         )
         cursor = connect.cursor()
     except psycopg2.Error as db_ex:
         print(f"ERROR | Database connection: {db_ex}")
         return  # Прерываем выполнение, так как нет доступа к базе данных
 
+    cursor.execute(
+        f"SELECT whatsapp_session FROM List_crms WHERE user_id = %s AND id = %s AND status_job = %s",
+        (user_id, crm_id, True)
+    )
+    check_list_crm = cursor.fetchone()
+
+    if not check_list_crm:
+        print("ERROR | CRM session not found.")
+        return
+
+    whatsapp_session = check_list_crm[0]
+    options = Options()
+    options.add_argument("start-maximized")
+    options.add_argument("disable-infobars")
+    options.add_argument("--disable-extensions")
+    options.add_argument("--headless")
+    options.log.level = "trace"
+    options.add_argument(f"-profile")
+    options.add_argument(f"{whatsapp_session}")
+
+    service = Service(executable_path = '/usr/local/bin/geckodriver')
+    driver = webdriver.Firefox(service = service, options = options)
     try:
+
         try:
-            cursor.execute(f"SELECT whatsapp_session FROM List_crms WHERE user_id = %s AND id = %s AND status_job = %s", (user_id, crm_id, True))
-            check_list_crm = cursor.fetchone()
-
-            if not check_list_crm:
-                print("ERROR | CRM session not found.")
-                return
-
-            whatsapp_session = check_list_crm[0]
-            options = Options()
-            options.add_argument("start-maximized")
-            options.add_argument("disable-infobars")
-            options.add_argument("--disable-extensions")
-            options.add_argument("--headless")
-            options.log.level = "trace"
-            options.add_argument(f"-profile")
-            options.add_argument(f"{whatsapp_session}")
-
-            service = Service(GeckoDriverManager().install())
-            driver = webdriver.Firefox(service=service, options=options)
 
             for client_phone in phone_numbers:
                 if client_phone is not None:
@@ -71,12 +73,18 @@ def send_manyoneclient(user_id, crm_id, phone_numbers, message):
                         whatsapp_url = f"https://web.whatsapp.com/send/?phone={client_phone}&text&type=phone_number&app_absent=0"
                         driver.get(whatsapp_url)
 
-                        WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.CSS_SELECTOR, 'div[aria-placeholder="Введите сообщение"]')))
+                        WebDriverWait(driver, 20).until(
+                            EC.presence_of_element_located(
+                                (By.CSS_SELECTOR, 'div[aria-placeholder="Введите сообщение"]')
+                                )
+                            )
 
                         time.sleep(3)
 
                         try:
-                            message_box = driver.find_element(By.CSS_SELECTOR, 'div[aria-placeholder="Введите сообщение"]')
+                            message_box = driver.find_element(
+                                By.CSS_SELECTOR, 'div[aria-placeholder="Введите сообщение"]'
+                                )
                             message_box.click()
 
                             for message_char in message:
@@ -97,12 +105,16 @@ def send_manyoneclient(user_id, crm_id, phone_numbers, message):
                                     pattern = r"\[\d{2}:\d{2},\s\d{2}\.\d{2}\.\d{4}\]\s.*:"
 
                                     # Чиста дата для дальнейшего сравнения в формате [время, дата] - как в HTML WH
-                                    clean_date = re.sub(pattern, lambda x: x.group(0).split(']')[0] + ']', last_message_date)
+                                    clean_date = re.sub(
+                                        pattern, lambda x: x.group(0).split(']')[0] + ']', last_message_date
+                                        )
                                     real_date_message = datetime.now().strftime("%d-%m-%Y %H-%M-%S")
                                     cursor.execute(
                                         "INSERT INTO sendmessageclient (user_id, crm_id, phone_number, message, send_date, type_sender, type_send, real_date_send) "
                                         "VALUES (%s, %s, %s, %s, %s, %s, %s, %s);",
-                                        (user_id, crm_id, original_phone, message, clean_date, Type_send_msg['WH_sender'], Type_send_msg['WH_type'], real_date_message))
+                                        (user_id, crm_id, original_phone, message, clean_date,
+                                         Type_send_msg['WH_sender'], Type_send_msg['WH_type'], real_date_message)
+                                    )
 
                             except Exception as ex:
                                 print(f"ERROR | Write message sent to client: {ex}")

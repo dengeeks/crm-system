@@ -20,6 +20,14 @@ Database_setting = {
     "database": "flaskdb"
 }
 
+# Database_setting = {
+#     "user": "db1",
+#     "password": "123",
+#     "host": "localhost",
+#     "port": "5432",
+#     "database": "db"
+# }
+
 Telegram_setting = {
     "WEBHOOK_URL": "https://52f0-109-71-241-54.ngrok-free.app/webhook"
 }
